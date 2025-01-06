@@ -1,0 +1,101 @@
+.dashboard-nav {
+    background-color: #333;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.dashboard-nav .logo img {
+    margin-left: 20px;
+    height: 40px;
+    width: auto;
+}
+
+.dashboard-nav .user-profile {
+    display: flex;
+    align-items: center;
+}
+
+.dashboard-nav .user-profile img {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.dashboard-nav .user-profile .username {
+    font-weight: bold;
+    margin-right: 15px;
+    white-space: nowrap;
+}
+
+.dashboard-nav .logout-btn {
+    text-decoration: none;
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding-bottom: 2px;
+    font-size: 16px;
+}
+
+/* Responsive styles for small screens */
+@media (max-width: 600px) {
+    .dashboard-nav {
+        padding: 10px 15px;
+    }
+
+    .dashboard-nav .logo img {
+        margin-left: 10px;
+        height: 35px;
+    }
+
+    .dashboard-nav .user-profile img {
+        height: 25px;
+        width: 25px;
+    }
+
+    .dashboard-nav .user-profile .username {
+        font-size: 14px;
+        margin-right: 5px;
+    }
+
+    .dashboard-nav .logout-btn {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 400px) {
+    .dashboard-nav .user-profile .username {
+        display: none; /* Hide username on very small screens */
+    }
+
+    .dashboard-nav .logout-btn {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 300px) {
+    .dashboard-nav {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+    }
+
+    .dashboard-nav .logo img {
+        margin: 0 auto 10px;
+        height: 30px;
+    }
+
+    .dashboard-nav .user-profile {
+        justify-content: space-between;
+        width: 100%;
+    }
+}

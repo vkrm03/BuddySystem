@@ -1,0 +1,23 @@
+  .link-icons {
+    margin-top: 80px;
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .content-container {
+    max-height: 660px;
+    color: white;
+    height: 100vh;
+  }
+  
+  @media (max-width: 600px) {
+    .content-container {
+      height: auto;
+    }
+    .link-icons {
+      margin-top: 10px;
+    }
+  }
+  

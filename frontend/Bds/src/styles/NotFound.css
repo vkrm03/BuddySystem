@@ -1,0 +1,22 @@
+.not-found {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  background-color: #f4f4f4;
+  color: #333;
+  font-family: "Arial", sans-serif;
+}
+
+.not-found h1 {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.not-found p {
+  font-size: 1.2rem;
+  color: #666;
+}

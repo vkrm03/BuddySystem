@@ -1,0 +1,17 @@
+body {
+    font-family: "Lato", sans-serif;
+  }
+  
+  .navbar-main {
+    height: 56px;
+    font-size: 17px;
+  }
+  
+  .navbar-item {
+    text-decoration: none;
+  }
+  
+  .w3-hover-red:hover {
+    color: red !important;
+  }
+  

@@ -1,0 +1,101 @@
+.week-selector {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.week-selector label {
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+.week-selector select {
+  padding: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  border: 1px solid #007bff;
+  border-radius: 4px;
+}
+
+.table-container {
+  border: 1px solid #007bff;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: white;
+  margin-top: 10px;
+}
+
+.open-btn {
+  padding: 10px 15px;
+  font-size: 14px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.week-details-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.details-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.details-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+.result {
+  width: 150px;
+  padding: 6px 10px;
+  font-size: 1rem;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-align: center;
+  background-color: #f9f9f9;
+}
+
+.mark-submit {
+  padding: 8px 12px;
+  font-size: 14px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.back-button {
+  background-color: (0, 0, 0, 0.6);
+  color: rgba(0, 0, 0, 0.6);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.week-details-table th,
+.week-details-table td {
+  padding: 12px 15px;
+  text-align: center;
+  border-bottom: 1px solid #007bff;
+}
+
+.week-details-table th {
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.week-details-table tr:hover {
+  background-color: #f1f1f1;
+}

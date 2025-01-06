@@ -1,0 +1,55 @@
+.question-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .question-text h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .question-text p {
+    font-size: 18px;
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+  
+  .submit-btn-container {
+    text-align: center;
+  }
+  
+  .submit-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .submit-btn:hover {
+    background-color: #45a049;
+  }
+  
+  .answer-textarea-container {
+    margin-bottom: 20px;
+  }
+  
+  .answer-textarea {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    resize: vertical;
+    transition: all 0.3s ease-in-out;
+    min-height: 100px;
+    max-height: 600px;
+  }
+  
+  .answer-textarea:focus {
+    border-color: #007bff;
+    outline: none;
+  }

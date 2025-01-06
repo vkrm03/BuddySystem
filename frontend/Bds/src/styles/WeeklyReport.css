@@ -1,0 +1,82 @@
+  h1 {
+    text-align: left;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .selectors {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .year-selector,
+  .week-selector {
+    display: flex;
+    align-items: center;
+  }
+  .week-selector {
+    margin-top: 20px;
+  }
+  
+  label {
+    margin-right: 10px;
+    font-weight: bold;
+    color: #555;
+  }
+  
+  select {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+  
+  .table-container {
+    margin-top: 20px;
+  }
+  
+  .weekly-report-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .weekly-report-table th,
+  .weekly-report-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .weekly-report-table th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .weekly-report-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .weekly-report-table tr:hover {
+    background-color: #eaeaea;
+  }
+  
+  @media (max-width: 500px) {
+    .selectors {
+      flex-direction: column; /* Stack the selectors vertically */
+      align-items: flex-start; /* Align to the left */
+    }
+  
+    .year-selector {
+      width: 100%;
+    }
+
+    .week-selector {
+      width: 100%;
+    }
+  
+    select {
+      width: 100%;
+      padding: 8px;
+    }
+  }

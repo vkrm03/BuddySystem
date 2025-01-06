@@ -1,0 +1,58 @@
+
+.leaderboard-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .week-selector {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  
+  .week-selector label {
+    margin-right: 10px;
+    font-size: 16px;
+  }
+  
+  .week-selector select {
+    padding: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .table-container {
+    border: 1px solid #007bff;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border: 1px solid #007bff;
+    border-radius: 8px;
+  }
+  
+  .leaderboard-table th,
+  .leaderboard-table td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #007bff;
+  }
+  
+  .leaderboard-table th {
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .leaderboard-table tr:hover {
+    background-color: #f1f1f1;
+  }
+  
