@@ -4,11 +4,11 @@ import "../../styles/Dashboard.css"
 const Dash = () => {
   return (<>
   <div className="main-content">
-          <h1>Admin Information</h1>
+          <h1>Alumini Information</h1>
           <div className="details">
             <div className="detail-row">
               <div className="label">Name:</div>
-              <div className="value">Alumini Name</div>
+              <div className="value">Vishalini J</div>
             </div>
             <div className="detail-row">
               <div className="label">Role:</div>
@@ -16,11 +16,11 @@ const Dash = () => {
             </div>
             <div className="detail-row">
               <div className="label">Email:</div>
-              <div className="value">Admin@admin.com</div>
+              <div className="value">vishalij99@gmail.com</div>
             </div>
             <div className="detail-row">
               <div className="label">Password:</div>
-              <div className="value">Password</div>
+              <div className="value">vishalini</div>
             </div>
             <div className="detail-row">
               <div className="label">Gender:</div>
@@ -28,11 +28,7 @@ const Dash = () => {
             </div>
             <div className="detail-row">
               <div className="label">Mobile No:</div>
-              <div className="value">+91 9840185872</div>
-            </div>
-            <div className="detail-row">
-              <div className="label">Total Std Mentees:</div>
-              <div className="value">0</div>
+              <div className="value">+91 9500093896</div>
             </div>
             <div className="detail-row">
               <div className="label">Total Students:</div>
