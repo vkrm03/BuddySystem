@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import uri from "../../../public/Uri";
 import "../../styles/Home.css";
 import "../../styles/Login.css";
 
@@ -29,31 +30,41 @@ const Login = () => {
     e.preventDefault();
     try {
       // Make a POST request to the backend
-      const response = await axios.post("http://localhost:5000/login", {
+      const emailOrReg = credentials.emailOrReg;
+      const response = await axios.post(uri + "/login", {
         role,
-        emailOrReg: credentials.emailOrReg,
+        emailOrReg: emailOrReg,
         passordob: credentials.passordob,
       });
-      localStorage.setItem("role", role);
-      console.log(localStorage.getItem("role"));
+      if (response.status === 200 && response.data.success === true) {
+        localStorage.setItem("role", role);
       Swal.fire({
         icon: "success",
         title: "Success",
-        text: response.data.message,
+        text: "Login Successful",
       }).then(() => {
         if (role === "adm") {
           navigate("/admin-dashboard");
         } else if (role === "alu") {
           navigate("/alumini-dashboard");
         } else if (role === "std") {
+          localStorage.setItem("reg", emailOrReg);
           navigate("/std-dashboard");
         }
       })
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Login Failed",
+          text: "Invalid Credentials",
+        })
+      }
+      
     } catch (error) {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: error.response?.data?.message || "An error occurred!",
+        text:  "Invalid Credentials",
       });
     }
   };

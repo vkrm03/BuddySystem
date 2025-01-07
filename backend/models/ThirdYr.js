@@ -5,11 +5,15 @@ const thirdyr = new mongoose.Schema({
         type: String,
         required: true,
     },
+    reg: {
+        type: String,
+        required: true,
+    },
     email: {
         type: String,
         required: true,
     },
-    reg: {
+    dob: {
         type: String,
         required: true,
     },
@@ -17,9 +21,15 @@ const thirdyr = new mongoose.Schema({
         type: String,
         required: true,
     },
-    dob: {
+    year: {
         type: String,
         required: true,
-    }
+    },
+    mentor_name: {
+        type: String,
+        required: true,
+    },
+    
 });
 
+module.exports = mongoose.model("thirdyr", thirdyr);

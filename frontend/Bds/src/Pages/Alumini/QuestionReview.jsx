@@ -1,82 +1,83 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../styles/QuestionReview.css";
 
 const QuestionReview = () => {
-  const weekData = [
-    {
-      week: "Week 1",
-      question: "What is React? Explain its features.",
-      meetingLink: "https://example.com/week1-meeting",
-    },
-    {
-      week: "Week 2",
-      question: "Explain the Virtual DOM in React.",
-      meetingLink: "https://example.com/week2-meeting",
-    },
-    {
-      week: "Week 3",
-      question: "What are React Hooks? Give examples.",
-      meetingLink: "https://example.com/week3-meeting",
-    },
-  ];
+  const [questions, setQuestions] = useState([]);
+  const [selectedWeek, setSelectedWeek] = useState(null);
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/questions");
+        const data = await response.json();
+        setQuestions(data);
+        if (data.length > 0) {
+          setSelectedWeek(data[0]);
+        }
+      } catch (error) {
+        console.error("Error fetching questions:", error);
+      }
+    };
 
-  const [selectedWeek, setSelectedWeek] = useState(weekData[0]);
+    fetchQuestions();
+  }, []);
 
   const handleWeekChange = (event) => {
-    const selected = weekData.find((w) => w.week === event.target.value);
+    const selected = questions.find((q) => q.week === event.target.value);
     setSelectedWeek(selected);
   };
 
   return (
-    <div className=" main-content">
-      <h1>Student Stats</h1>
+    <div className="main-content">
+      <h1>Question Review</h1>
       <div className="week-selector">
         <label htmlFor="week-select">Select Week:</label>
         <select
           id="week-select"
-          value={selectedWeek.week}
+          value={selectedWeek ? selectedWeek.week : ""}
           onChange={handleWeekChange}
         >
-          {weekData.map((week) => (
+          {questions.map((week) => (
             <option key={week.week} value={week.week}>
-              {week.week}
+              Week {week.week}
             </option>
           ))}
         </select>
       </div>
 
-      <div className="table-container">
-        <table className="week-details-table">
-          <thead>
-            <tr>
-              <th>Details</th>
-              <th>Information</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Question</td>
-              <td>{selectedWeek.question}</td>
-            </tr>
-            <tr>
-              <td>Meeting Link</td>
-              <td>
-                <a
-                  href={selectedWeek.meetingLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {selectedWeek.meetingLink}
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>No of Std Done</td>
-              <td>3/20</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      {selectedWeek && (
+        <div className="table-container">
+          <table className="week-details-table">
+            <thead>
+              <tr>
+                <th>Details</th>
+                <th>Information</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Question</td>
+                <td>{selectedWeek.que}</td>
+              </tr>
+              <tr>
+                <td>Meeting Link</td>
+                <td>
+                  <a
+                    href={selectedWeek.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {selectedWeek.link}
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>No of Std Done</td>
+                <td>None</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };
