@@ -1,52 +1,42 @@
-import React, { useState } from "react";
-import "../../styles/Leaderboard.css"; 
+import React, { useState, useEffect } from "react";
+import "../../styles/Leaderboard.css";
 
 const Leaderboard = () => {
-  const leaderboardData = [
-    {
-      week: 1,
-      data: [
-        { rank: 1, name: "Name 1", score: 95 },
-        { rank: 2, name: "Name 2", score: 90 },
-        { rank: 3, name: "Name 3", score: 85 },
-      ],
-    },
-    {
-      week: 2,
-      data: [
-        { rank: 1, name: "Name 2", score: 98 },
-        { rank: 2, name: "Name 1", score: 92 },
-        { rank: 3, name: "Name 3", score: 85 },
-      ],
-    },
-  ];
+  const [selectedWeek, setSelectedWeek] = useState(1); // Default week 1
+  const [leaderboardData, setLeaderboardData] = useState([]);
 
-  const [selectedWeek, setSelectedWeek] = useState(1);
-  const [currentLeaderboard, setCurrentLeaderboard] = useState(
-    leaderboardData.find((week) => week.week === 1).data
-  );
+  useEffect(() => {
+    // Fetch leaderboard data for the selected week
+    const fetchLeaderboard = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/leaderboard/${selectedWeek}`);
+        const data = await response.json();
+        setLeaderboardData(data.data); // Set leaderboard data
+      } catch (error) {
+        console.error("Error fetching leaderboard data:", error);
+      }
+    };
 
-  const handleWeekChange = (weekNumber) => {
-    setSelectedWeek(weekNumber);
-    const weekData = leaderboardData.find((week) => week.week === weekNumber);
-    setCurrentLeaderboard(weekData.data);
+    fetchLeaderboard();
+  }, [selectedWeek]); // Re-fetch when the selected week changes
+
+  const handleWeekChange = (event) => {
+    setSelectedWeek(Number(event.target.value)); // Update selected week
   };
 
   return (
     <div className="main-content">
-        <h1>Leaderboard</h1>
+      <h1>Leaderboard</h1>
       <div className="week-selector">
         <label htmlFor="week-select">Select Week: </label>
         <select
           id="week-select"
           value={selectedWeek}
-          onChange={(e) => handleWeekChange(Number(e.target.value))}
+          onChange={handleWeekChange}
         >
-          {leaderboardData.map((week) => (
-            <option key={week.week} value={week.week}>
-              Week {week.week}
-            </option>
-          ))}
+          <option value={1}>Week 1</option>
+          <option value={2}>Week 2</option>
+          {/* Add more weeks as needed */}
         </select>
       </div>
 
@@ -60,8 +50,8 @@ const Leaderboard = () => {
             </tr>
           </thead>
           <tbody>
-            {currentLeaderboard.map((entry, index) => (
-              <tr key={index}>
+            {leaderboardData.map((entry) => (
+              <tr key={entry.rank}>
                 <td>{entry.rank}</td>
                 <td>{entry.name}</td>
                 <td>{entry.score}</td>

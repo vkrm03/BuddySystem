@@ -29,7 +29,6 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Make a POST request to the backend
       const emailOrReg = credentials.emailOrReg;
       const response = await axios.post(uri + "/login", {
         role,

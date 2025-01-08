@@ -1,27 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import uri from "../../../public/Uri";
 import "../../styles/QuestionReview.css";
 
 const StdStats = () => {
-  const studentData = {
-    "Week 1": [
-      { name: "Aurn", marks: 100, grade: "A+" },
-      { name: "Mahesh", marks: 95, grade: "A" },
-    ],
-    "Week 2": [
-      { name: "Aurn", marks: 88, grade: "B+" },
-      { name: "Mahesh", marks: 92, grade: "A" },
-    ],
-    "Week 3": [
-      { name: "Aurn", marks: 95, grade: "A" },
-      { name: "Mahesh", marks: 89, grade: "B+" },
-    ],
-  };
+  const [weeks, setWeeks] = useState([]);
+  const [selectedWeek, setSelectedWeek] = useState("");
+  const [stats, setStats] = useState([]);
+  useEffect(() => {
+    const fetchWeeks = async () => {
+      try {
+        const response = await fetch(uri + "/questions");
+        const questions = await response.json();
+        const weekList = questions.map((q) => `Week ${q.week}`);
+        setWeeks(weekList);
+        setSelectedWeek(weekList[0] || "");
+      } catch (error) {
+        console.error("Error fetching weeks:", error);
+      }
+    };
+    fetchWeeks();
+  }, []);
 
-  const [selectedWeek, setSelectedWeek] = useState("Week 1");
+  useEffect(() => {
+    if (!selectedWeek) return;
 
-  const handleWeekChange = (event) => {
-    setSelectedWeek(event.target.value);
-  };
+    const fetchStats = async () => {
+      try {
+        const weekNumber = selectedWeek.split(" ")[1];
+        const response = await fetch(uri + `/student-stats/${weekNumber}`);
+        const data = await response.json();
+        setStats(data);
+      } catch (error) {
+        console.error("Error fetching stats:", error);
+      }
+    };
+    fetchStats();
+  }, [selectedWeek]);
 
   return (
     <div className="main-content">
@@ -31,9 +45,9 @@ const StdStats = () => {
         <select
           id="week-select"
           value={selectedWeek}
-          onChange={handleWeekChange}
+          onChange={(e) => setSelectedWeek(e.target.value)}
         >
-          {Object.keys(studentData).map((week) => (
+          {weeks.map((week) => (
             <option key={week} value={week}>
               {week}
             </option>
@@ -46,14 +60,16 @@ const StdStats = () => {
           <thead>
             <tr>
               <th>Student Name</th>
+              <th>Register Number</th>
               <th>Marks</th>
               <th>Grade</th>
             </tr>
           </thead>
           <tbody>
-            {studentData[selectedWeek].map((student, index) => (
+            {stats.map((student, index) => (
               <tr key={index}>
                 <td>{student.name}</td>
+                <td>{student.reg}</td>
                 <td>{student.marks}</td>
                 <td>{student.grade}</td>
               </tr>

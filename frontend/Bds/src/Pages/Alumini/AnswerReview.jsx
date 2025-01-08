@@ -1,25 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Swal from "sweetalert2";
+import uri from "../../../public/Uri";
 import "../../styles/QuestionReview.css";
 
 const AnsReview = () => {
-  const studentData = {
-    "Week 1": [
-      { name: "Aurn", question: "What is React?", answer: "React is a JavaScript library for building user interfaces." },
-      { name: "Mahesh", question: "Explain React components.", answer: "React components are reusable building blocks of a React application." },
-    ],
-    "Week 2": [
-      { name: "Aurn", question: "What is the Virtual DOM?", answer: "The Virtual DOM is a lightweight copy of the actual DOM, used by React to optimize rendering." },
-      { name: "Mahesh", question: "Explain React state.", answer: "State is a JavaScript object that holds dynamic data for a React component." },
-    ],
-    "Week 3": [
-      { name: "Aurn", question: "What are React Hooks?", answer: "React Hooks are functions that let you use state and other React features without writing a class." },
-      { name: "Mahesh", question: "Explain useEffect.", answer: "useEffect is a hook that allows you to perform side effects in functional components." },
-    ],
-  };
-
-  const [selectedWeek, setSelectedWeek] = useState("Week 1");
+  const [dataByWeeks, setDataByWeeks] = useState({});
+  const [selectedWeek, setSelectedWeek] = useState("");
   const [openedWeek, setOpenedWeek] = useState(null);
   const [selectedStudent, setSelectedStudent] = useState(null);
+
+  const fetchAllAnswers = async () => {
+    try {
+      const response = await fetch(uri + "/all-answers");
+      if (!response.ok) {
+        throw new Error("Failed to fetch answers");
+      }
+      const answers = await response.json();
+
+      const groupedData = answers.reduce((acc, answer) => {
+        const week = `Week ${answer.week}`;
+        if (!acc[week]) acc[week] = [];
+        acc[week].push(answer);
+        return acc;
+      }, {});
+      setDataByWeeks(groupedData);
+
+      const firstWeek = Object.keys(groupedData)[0];
+      setSelectedWeek(firstWeek);
+    } catch (error) {
+      console.error("Error fetching all answers:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllAnswers();
+  }, []);
 
   const handleWeekChange = (event) => {
     setSelectedWeek(event.target.value);
@@ -29,6 +44,53 @@ const AnsReview = () => {
     setOpenedWeek(week);
     setSelectedStudent(student);
   };
+
+
+  const handleSubmitGradeAndMark = async () => {
+    const updatedData = {
+      reg: selectedStudent.reg,
+      week: openedWeek.split(" ")[1],
+      mark: document.querySelector(".result[type='text']").value,
+      grade: document.querySelector(".result[name='grade']").value,
+    };
+  
+    try {
+      const response = await fetch(uri + "/update-grade-mark", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedData),
+      });
+  
+      const result = await response.json();
+  
+      if (response.ok) {
+        Swal.fire({
+                icon: "success",
+                title: "Success",
+                text: "Marks and Grade updated Successful",
+              })
+        fetchAllAnswers();
+        setOpenedWeek(null);
+        setSelectedStudent(null);
+      } else {
+        Swal.fire({
+                icon: "error",
+                title: "Failed",
+                text: result.message,
+              })
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error,
+      })
+    }
+  };
+  
+
 
   return (
     <div className="main-content">
@@ -42,7 +104,7 @@ const AnsReview = () => {
               value={selectedWeek}
               onChange={handleWeekChange}
             >
-              {Object.keys(studentData).map((week) => (
+              {Object.keys(dataByWeeks).map((week) => (
                 <option key={week} value={week}>
                   {week}
                 </option>
@@ -50,31 +112,33 @@ const AnsReview = () => {
             </select>
           </div>
 
-          <div className="table-container">
-            <table className="week-details-table">
-              <thead>
-                <tr>
-                  <th>Student Name</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {studentData[selectedWeek].map((student, index) => (
-                  <tr key={index}>
-                    <td>{student.name}</td>
-                    <td>
-                      <button
-                        className="open-btn"
-                        onClick={() => handleOpenWeek(selectedWeek, student)}
-                      >
-                        Open
-                      </button>
-                    </td>
+          {selectedWeek && (
+            <div className="week-section">
+              <table className="week-details-table">
+                <thead>
+                  <tr>
+                    <th>Register Number</th>
+                    <th>Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {dataByWeeks[selectedWeek]?.map((student, index) => (
+                    <tr key={index}>
+                      <td>{student.reg}</td>
+                      <td>
+                        <button
+                          className="open-btn"
+                          onClick={() => handleOpenWeek(selectedWeek, student)}
+                        >
+                          Open
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       ) : (
         <div className="week-details">
@@ -89,15 +153,15 @@ const AnsReview = () => {
               <i className="fa-solid fa-arrow-left"></i>
             </button>
             <h2>
-              {selectedStudent.name}'s {openedWeek} Details
+              {selectedStudent.reg}'s {openedWeek} Details
             </h2>
           </div>
           <p>
-            <strong>Question:</strong> {selectedStudent.question}
+            <strong>Question:</strong> {selectedStudent.que}
           </p>
           <textarea
             className="answer-textarea"
-            value={selectedStudent.answer}
+            value={selectedStudent.ans}
             readOnly
             rows="5"
             cols="50"
@@ -105,22 +169,22 @@ const AnsReview = () => {
           <p>
             <strong>Marks:</strong>{" "}
             <input
-                type="text"
-                placeholder="Enter marks"
-                className="result"
+              type="text"
+              placeholder="Enter marks"
+              className="result"
             />
           </p>
           <p>
             <strong>Grade:</strong>{" "}
-            <select name="grade" id="" className="result">
-                <option value="A+">A+</option>
-                <option value="A">A</option>
-                <option value="B+">B+</option>
-                <option value="B">B</option>
-                <option value="C">C</option>
+            <select name="grade" className="result">
+              <option value="A+">A+</option>
+              <option value="A">A</option>
+              <option value="B+">B+</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
             </select>
           </p>
-          <button className="open-btn mark-submit">Submit</button>
+          <button className="open-btn mark-submit" onClick={handleSubmitGradeAndMark}>Submit</button>
         </div>
       )}
     </div>

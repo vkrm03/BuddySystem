@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import uri from "../../../public/Uri";
 import "../../styles/QuestionReview.css";
 
 const QuestionReview = () => {
@@ -7,7 +8,7 @@ const QuestionReview = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await fetch("http://localhost:5000/questions");
+        const response = await fetch(uri + "/questions");
         const data = await response.json();
         setQuestions(data);
         if (data.length > 0) {

@@ -1,78 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import uri from "../../../public/Uri";
 import "../../styles/WeeklyReport.css";
 
 const WeeklyReport = () => {
-  const reportData = {
-    III: [
-      {
-        week: 1,
-        data: [
-          { rank: 1, name: "III Year Name 1", score: 95 },
-          { rank: 2, name: "III Year Name 2", score: 90 },
-          { rank: 3, name: "III Year Name 3", score: 85 },
-        ],
-      },
-      {
-        week: 2,
-        data: [
-          { rank: 1, name: "III Year Name 1", score: 98 },
-          { rank: 2, name: "III Year Name 2", score: 92 },
-          { rank: 3, name: "III Year Name 3", score: 85 },
-        ],
-      },
-    ],
-    II: [
-      {
-        week: 1,
-        data: [
-          { rank: 1, name: "II Year Name 1", score: 85 },
-          { rank: 2, name: "II Year Name 2", score: 80 },
-          { rank: 3, name: "II Year Name 3", score: 75 },
-        ],
-      },
-      {
-        week: 2,
-        data: [
-          { rank: 1, name: "II Year Name 1", score: 88 },
-          { rank: 2, name: "II Year Name 2", score: 84 },
-          { rank: 3, name: "II Year Name 3", score: 82 },
-        ],
-      },
-    ],
-    I: [
-      {
-        week: 1,
-        data: [
-          { rank: 1, name: "I Year Name 1", score: 75 },
-          { rank: 2, name: "I Year Name 2", score: 70 },
-          { rank: 3, name: "I Year Name 3", score: 65 },
-        ],
-      },
-      {
-        week: 2,
-        data: [
-          { rank: 1, name: "I Year Name 1", score: 78 },
-          { rank: 2, name: "I Year Name 2", score: 74 },
-          { rank: 3, name: "I Year Name 3", score: 72 },
-        ],
-      },
-    ],
-  };
-
   const [selectedYear, setSelectedYear] = useState("III");
   const [selectedWeek, setSelectedWeek] = useState(1);
-  const [currentReport, setCurrentReport] = useState(reportData["III"][0].data);
+  const [currentReport, setCurrentReport] = useState([]);
+  
+  // Fetch data for selected year and week
+  const fetchReportData = async (year, week) => {
+    try {
+      const response = await axios.get(uri + `/student-stats/${year}/${week}`);
+      setCurrentReport(response.data); // Store the fetched data
+    } catch (error) {
+      console.error("Error fetching weekly report:", error);
+    }
+  };
+
+  useEffect(() => {
+    // Fetch the data whenever year or week changes
+    fetchReportData(selectedYear, selectedWeek);
+  }, [selectedYear, selectedWeek]); // Run when selectedYear or selectedWeek changes
 
   const handleYearChange = (year) => {
     setSelectedYear(year);
-    setSelectedWeek(1);
-    setCurrentReport(reportData[year][0].data);
+    setSelectedWeek(1); // Reset to week 1 when year changes
   };
 
   const handleWeekChange = (weekNumber) => {
     setSelectedWeek(weekNumber);
-    const weekData = reportData[selectedYear].find((week) => week.week === weekNumber);
-    setCurrentReport(weekData.data);
   };
 
   return (
@@ -100,9 +57,10 @@ const WeeklyReport = () => {
             value={selectedWeek}
             onChange={(e) => handleWeekChange(Number(e.target.value))}
           >
-            {reportData[selectedYear].map((week) => (
-              <option key={week.week} value={week.week}>
-                Week {week.week}
+            {/* Assume the backend provides all available weeks for the selected year */}
+            {[1, 2, 3, 4, 5].map((week) => (
+              <option key={week} value={week}>
+                Week {week}
               </option>
             ))}
           </select>
@@ -115,17 +73,25 @@ const WeeklyReport = () => {
             <tr>
               <th>Rank</th>
               <th>Name</th>
-              <th>Score</th>
+              <th>Marks</th>
+              <th>Grade</th>
             </tr>
           </thead>
           <tbody>
-            {currentReport.map((entry, index) => (
-              <tr key={index}>
-                <td>{entry.rank}</td>
-                <td>{entry.name}</td>
-                <td>{entry.score}</td>
+            {currentReport.length > 0 ? (
+              currentReport.map((entry, index) => (
+                <tr key={index}>
+                  <td>{entry.rank}</td>
+                  <td>{entry.name}</td>
+                  <td>{entry.marks}</td>
+                  <td>{entry.grade}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="4">No data available for this week.</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

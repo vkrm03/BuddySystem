@@ -1,16 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import uri from "../../../public/Uri";
 import "../../styles/StdStats.css";
 
-const StdStats = () => {
-  const weeklyStats = [
-    { week: 1, marks: 85, grade: "A", question: "What is React?", answer: "A JavaScript library for building UI" },
-    { week: 2, marks: 78, grade: "B", question: "Explain JSX.", answer: "A syntax extension for JavaScript" },
-    { week: 3, marks: 92, grade: "A+", question: "What is the virtual DOM?", answer: "A concept where React maintains an in-memory representation of the DOM" },
-    { week: 4, marks: 88, grade: "A", question: "What is React Router?", answer: "A library for routing in React applications" },
-    { week: 5, marks: 75, grade: "B", question: "What is state in React?", answer: "A JavaScript object that holds information about the component" },
-  ];
-
+const StdStats = ({ reg }) => {
+  const [answers, setAnswers] = useState([]);
   const [selectedWeek, setSelectedWeek] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchAnswers = async () => {
+      try {
+        const response = await fetch(uri + `/answers/${localStorage.getItem('reg')}`);
+        const data = await response.json();
+
+        if (response.ok) {
+          setAnswers(data);
+        } else {
+          setError(data.message || "Error fetching answers");
+        }
+      } catch (err) {
+        setError("Unable to fetch answers. Please try again later.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAnswers();
+  }, [reg]);
+
   const handleOpenWeek = (weekStat) => {
     setSelectedWeek(weekStat);
   };
@@ -18,7 +36,12 @@ const StdStats = () => {
   return (
     <div className="main-content">
       <h1>My Statistics</h1>
-      {!selectedWeek ? (
+
+      {isLoading ? (
+        <p>Loading answers...</p>
+      ) : error ? (
+        <p className="error-message">{error}</p>
+      ) : !selectedWeek ? (
         <div className="table-container">
           <table className="stats-table">
             <thead>
@@ -30,13 +53,13 @@ const StdStats = () => {
               </tr>
             </thead>
             <tbody>
-              {weeklyStats.map((weekStat, index) => (
+              {answers.map((answer, index) => (
                 <tr key={index}>
-                  <td>Week {weekStat.week}</td>
-                  <td>{weekStat.marks}</td>
-                  <td>{weekStat.grade}</td>
+                  <td>Week {answer.week}</td>
+                  <td>{answer.mark}</td>
+                  <td>{answer.grade}</td>
                   <td>
-                    <button className="open-btn" onClick={() => handleOpenWeek(weekStat)}>
+                    <button className="open-btn" onClick={() => handleOpenWeek(answer)}>
                       Open
                     </button>
                   </td>
@@ -48,18 +71,17 @@ const StdStats = () => {
       ) : (
         <div className="week-details">
           <h2>Week {selectedWeek.week} Details</h2>
-          <p><strong>Question:</strong> {selectedWeek.question}</p>
+          <p><strong>Question:</strong> {selectedWeek.que}</p>
           <textarea
             className="answer-textarea"
-            value={selectedWeek.answer}
+            value={selectedWeek.ans}
             readOnly
             rows="5"
             cols="50"
           />
-
-          <p><strong>Marks:</strong> {selectedWeek.marks}</p>
+          <p><strong>Marks:</strong> {selectedWeek.mark}</p>
           <p><strong>Grade:</strong> {selectedWeek.grade}</p>
-
+          <button className="back-btn" onClick={() => setSelectedWeek(null)}>Back</button>
         </div>
       )}
     </div>
