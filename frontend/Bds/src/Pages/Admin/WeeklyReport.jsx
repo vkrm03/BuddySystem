@@ -7,25 +7,23 @@ const WeeklyReport = () => {
   const [selectedYear, setSelectedYear] = useState("III");
   const [selectedWeek, setSelectedWeek] = useState(1);
   const [currentReport, setCurrentReport] = useState([]);
-  
-  // Fetch data for selected year and week
+
   const fetchReportData = async (year, week) => {
     try {
       const response = await axios.get(uri + `/student-stats/${year}/${week}`);
-      setCurrentReport(response.data); // Store the fetched data
+      setCurrentReport(response.data);
     } catch (error) {
       console.error("Error fetching weekly report:", error);
     }
   };
 
   useEffect(() => {
-    // Fetch the data whenever year or week changes
     fetchReportData(selectedYear, selectedWeek);
-  }, [selectedYear, selectedWeek]); // Run when selectedYear or selectedWeek changes
+  }, [selectedYear, selectedWeek]);
 
   const handleYearChange = (year) => {
     setSelectedYear(year);
-    setSelectedWeek(1); // Reset to week 1 when year changes
+    setSelectedWeek(1);
   };
 
   const handleWeekChange = (weekNumber) => {
@@ -57,7 +55,6 @@ const WeeklyReport = () => {
             value={selectedWeek}
             onChange={(e) => handleWeekChange(Number(e.target.value))}
           >
-            {/* Assume the backend provides all available weeks for the selected year */}
             {[1, 2, 3, 4, 5].map((week) => (
               <option key={week} value={week}>
                 Week {week}

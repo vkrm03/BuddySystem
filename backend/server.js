@@ -253,23 +253,16 @@ app.get("/student-stats/:year/:week", async (req, res) => {
   const { year, week } = req.params;
 
   try {
-    // Fetch all students from the specified year
     const allStudents = await thirdyr.find({ year });
-
-    // Fetch answers for the selected week
     const answers = await thirdyrans.find({ week });
-
-    // Map answers by student registration number
     const answerMap = answers.reduce((acc, answer) => {
       acc[answer.reg] = { mark: answer.mark, grade: answer.grade };
       return acc;
     }, {});
-
-    // Prepare the student stats for the selected week
     const stats = allStudents.map((student, index) => {
-      const answer = answerMap[student.reg]; // Find student's answer for this week
+      const answer = answerMap[student.reg];
       return {
-        rank: index + 1, // Assuming students are sorted by rank
+        rank: index + 1,
         name: student.name,
         marks: answer ? answer.mark : "Not Submitted",
         grade: answer ? answer.grade : "Not Submitted",
