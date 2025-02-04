@@ -8,7 +8,7 @@ import StdDashboard from "./Pages/Student/StdDashboard";
 import MenteeDashboard from "./Pages/Mentee/MenteeDashboard";
 import AdminDashboard from "./Pages/Admin/AdminDashboard";
 import AluminiDashboard from "./Pages/Alumini/AluminiDashboard";
-import NotFound from "./Pages/NOtFound";
+import NotFound from "./Pages/NotFound";
 
 function App() {
   return (

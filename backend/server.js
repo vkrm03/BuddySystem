@@ -13,7 +13,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 mongoose
-  .connect("mongodb://localhost:27017/BuddySys", {
+  .connect("mongodb+srv://vkrm:vkrm123@bds.m7nf3.mongodb.net/BuddySys", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -245,33 +245,6 @@ app.get("/leaderboard/:week", async (req, res) => {
     res.status(200).json({ week, data: rankedStats });
   } catch (error) {
     console.error("Error generating leaderboard:", error);
-    res.status(500).json({ success: false, message: "Server error!" });
-  }
-});
-
-app.get("/student-stats/:year/:week", async (req, res) => {
-  const { year, week } = req.params;
-
-  try {
-    const allStudents = await thirdyr.find({ year });
-    const answers = await thirdyrans.find({ week });
-    const answerMap = answers.reduce((acc, answer) => {
-      acc[answer.reg] = { mark: answer.mark, grade: answer.grade };
-      return acc;
-    }, {});
-    const stats = allStudents.map((student, index) => {
-      const answer = answerMap[student.reg];
-      return {
-        rank: index + 1,
-        name: student.name,
-        marks: answer ? answer.mark : "Not Submitted",
-        grade: answer ? answer.grade : "Not Submitted",
-      };
-    });
-
-    res.status(200).json(stats);
-  } catch (error) {
-    console.error("Error fetching student stats:", error);
     res.status(500).json({ success: false, message: "Server error!" });
   }
 });

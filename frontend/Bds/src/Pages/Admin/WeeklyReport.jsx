@@ -1,25 +1,43 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import uri from "../../../public/Uri";
+import React, { useState } from "react";
 import "../../styles/WeeklyReport.css";
 
 const WeeklyReport = () => {
   const [selectedYear, setSelectedYear] = useState("III");
   const [selectedWeek, setSelectedWeek] = useState(1);
-  const [currentReport, setCurrentReport] = useState([]);
 
-  const fetchReportData = async (year, week) => {
-    try {
-      const response = await axios.get(uri + `/student-stats/${year}/${week}`);
-      setCurrentReport(response.data);
-    } catch (error) {
-      console.error("Error fetching weekly report:", error);
-    }
+  // Dummy data for demonstration
+  const dummyReports = {
+    III: {
+      1: [
+        { rank: 1, name: "Alice", marks: 95, grade: "A" },
+        { rank: 2, name: "Bob", marks: 90, grade: "A" },
+      ],
+      2: [
+        { rank: 1, name: "Charlie", marks: 92, grade: "A" },
+        { rank: 2, name: "David", marks: 88, grade: "B" },
+      ],
+    },
+    II: {
+      1: [
+        { rank: 1, name: "Eve", marks: 85, grade: "B" },
+        { rank: 2, name: "Frank", marks: 80, grade: "B" },
+      ],
+      2: [
+        { rank: 1, name: "Grace", marks: 89, grade: "B+" },
+        { rank: 2, name: "Hank", marks: 84, grade: "B" },
+      ],
+    },
+    I: {
+      1: [
+        { rank: 1, name: "Ivy", marks: 75, grade: "C" },
+        { rank: 2, name: "Jack", marks: 70, grade: "C" },
+      ],
+      2: [
+        { rank: 1, name: "Kara", marks: 82, grade: "B" },
+        { rank: 2, name: "Leo", marks: 78, grade: "C+" },
+      ],
+    },
   };
-
-  useEffect(() => {
-    fetchReportData(selectedYear, selectedWeek);
-  }, [selectedYear, selectedWeek]);
 
   const handleYearChange = (year) => {
     setSelectedYear(year);
@@ -29,6 +47,9 @@ const WeeklyReport = () => {
   const handleWeekChange = (weekNumber) => {
     setSelectedWeek(weekNumber);
   };
+
+  const currentReport = dummyReports[selectedYear]?.[selectedWeek] || [];
+  const totalWeeks = Object.keys(dummyReports[selectedYear] || {}).map(Number);
 
   return (
     <div className="main-content">
@@ -55,7 +76,7 @@ const WeeklyReport = () => {
             value={selectedWeek}
             onChange={(e) => handleWeekChange(Number(e.target.value))}
           >
-            {[1, 2, 3, 4, 5].map((week) => (
+            {totalWeeks.map((week) => (
               <option key={week} value={week}>
                 Week {week}
               </option>
