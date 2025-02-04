@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import uri from "../../../public/Uri";
 import "../../styles/LeaderBoard.css";
 
 const Leaderboard = () => {
@@ -9,7 +10,7 @@ const Leaderboard = () => {
     // Fetch leaderboard data for the selected week
     const fetchLeaderboard = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/leaderboard/${selectedWeek}`);
+        const response = await fetch(uri + `/leaderboard/${selectedWeek}`);
         const data = await response.json();
         setLeaderboardData(data.data); // Set leaderboard data
       } catch (error) {
