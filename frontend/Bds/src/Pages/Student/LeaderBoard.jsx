@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../../styles/Leaderboard.css";
+import "../../styles/LeaderBoard.css";
 
 const Leaderboard = () => {
   const [selectedWeek, setSelectedWeek] = useState(1); // Default week 1
